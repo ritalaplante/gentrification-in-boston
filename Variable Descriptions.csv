@@ -1,0 +1,58 @@
+﻿Variable Name,Variable Category
+white,Race
+black,Race
+nativeam,Race
+asian,Race
+pacislander,Race
+other,Race
+children,Age
+youngAdult,Age
+adult,Age
+elderly,Age
+Percentage with Bachelor Degree or Higher,Score Metric
+Household Income,Score Metric
+Contract Rent,Score Metric
+House Prices,Score Metric
+ownerOcc,Housing Tenure
+renterOcc,Housing Tenure
+Percentage Professional Workers,Score Metric
+hoursWk,Hours Worked
+citizenUS,Citizenship
+citizenPR,Citizenship
+citizenAbroad,Citizenship
+citizenNaturalized,Citizenship
+notCitizen,Citizenship
+single,Marital Status
+married,Marital Status
+separated,Marital Status
+marriedOther,Marital Status
+widowed,Marital Status
+divorced,Marital Status
+privateVehicle,Transportation
+carpool,Transportation
+bus,Transportation
+subwayTram,Transportation
+train,Transportation
+ferry,Transportation
+taxi,Transportation
+bicycle,Transportation
+walked,Transportation
+otherTravel,Transportation
+homeworker,Transportation
+2000_later,Building Age
+1990_1999,Building Age
+1980_1989,Building Age
+1970_1979,Building Age
+1960_1969,Building Age
+1950_1959,Building Age
+1940_1949,Building Age
+pre_1939,Building Age
+detatched_1,Building Structure
+attached_1,Building Structure
+2_unit,Building Structure
+3to4_unit,Building Structure
+5to9_unit,Building Structure
+10to19_unit,Building Structure
+20to49_unit,Building Structure
+50plus_unit,Building Structure
+mobile,Building Structure
