@@ -1,4 +1,4 @@
-# About this Repository
+# Next Stop Eastie: Using Machine Learning to Predict Socioeconomic Trends in Boston and Beyond
 This repository is contains folders of scripts, datasets, and model outputs used in our study of socioeconomic change in Greater Boston. <br><br>
 The scripts file contains a series of Jupyter notebooks used to clean ACS tables, perform PCA to create a neighborhood socioeconmic score for all 
 census tracts in the dataset, perform predictive modeling to gain a sense of how socioeconomic change is occuring in Boston and surrounding communities,
