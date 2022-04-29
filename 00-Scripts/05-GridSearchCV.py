@@ -111,6 +111,7 @@ print("Minimum Samples Leaf: " + str(param_grid['min_samples_leaf']))
 print("Maximum Features: " + str(param_grid['max_features']))
 print("Number of permutations: " + str(len(param_grid['n_estimators']) * len(param_grid['max_depth']) * len(param_grid['max_features']) * len(param_grid['min_samples_leaf'])))
 
+#For Extra Trees Regressor
 clf = ensemble.ExtraTreesRegressor(n_jobs=-1, random_state=r_state) # Can be 'mae' or 'mse' -- should presumably match scoring below
 start = timer()
 # There is some disagreement about whether cross-validation or bootstrapping
@@ -126,18 +127,18 @@ print("Execution complete in: {0:15.1f}s".format(duration) + " (" + str(datetime
 print("Best score: " + str(cv.best_score_))
 print("Done.")
 
-log = open('/Users/ritalaplante/Desktop/Thesis Data and Analytics/10-Summary Stats/'+to_use+'-Fit.txt','a')
+log = open('/Users/ritalaplante/Desktop/Thesis Data and Analytics/09-Logged Outputs/'+to_use+'-Fit.txt','a')
 
-print("Params: ", file=log)
+print("Params Extra Trees: ", file=log)
 print(param_grid, file=log)
-print("Best Cross-Validation score: " + str(cv.best_score_), file=log)
+print("Best Cross-Validation score Extra Trees: " + str(cv.best_score_), file=log)
 
 best_clf = cv.best_estimator_ # Extract the best estimator from the GridSearch
 best_clf.fit(X_train, y_train)
 y_pred  = best_clf.predict(X_test)
 
-print("Best parameters from Cross-Validation: " + str(cv.best_params_), file=log)
-print("Best parameters from Cross-Validation: " + str(cv.best_params_))
+print("Best parameters from Cross-Validation Extra Trees " + str(cv.best_params_), file=log)
+print("Best parameters from Cross-Validation Extra Trees: " + str(cv.best_params_))
 print("", file=log)
 
 print("Cross-check against full spec of model: ", file=log)
@@ -154,34 +155,80 @@ print("", file=log)
 # can inspect later...
 fi = pd.DataFrame.from_dict({'feature':X_test.columns.values, 'importance':best_clf.feature_importances_})
 fi.sort_values(by='importance', ascending=False, inplace=True)
-fi.to_csv('/Users/ritalaplante/Desktop/Thesis Data and Analytics/07-Neighborhood Predictions/FeatureImportance.csv', index=False)
+fi.to_csv('/Users/ritalaplante/Desktop/Thesis Data and Analytics/07-Neighborhood Predictions/FeatureImportance' + to_use + 'ETR.csv', index=False)
 
-print("Feature Importances (5 Biggest):", file=log)
+print("Feature Importances (5 Biggest) Extra Trees:", file=log)
 print(fi.head(5), file=log)
 print(fi.head(5))
+print("", file=log)
+
+
+print("Feature Importances (10 Biggest) Extra Trees:", file=log)
+print(fi.head(10), file=log)
+print(fi.head(10))
+print("", file = log)
 
 log.close()
-# best_clf = cv.best_estimator_ # Extract the best estimator from the GridSearch
-# best_clf.fit(X_train, y_train)
-# y_pred  = best_clf.predict(X_test)
 
-# print("Best parameters from Cross-Validation: " + str(cv.best_params_))
+#For Random Forests
+clf = ensemble.RandomForestRegressor(n_jobs=-1, random_state=r_state) # Can be 'mae' or 'mse' -- should presumably match scoring below
+start = timer()
+# There is some disagreement about whether cross-validation or bootstrapping
+# is needed for ExtraTrees (or even RandomForests) regressors:
+# https://stats.stackexchange.com/questions/279163/cross-validation-in-extratreesregressor
+scoring = {'mae':'neg_mean_absolute_error', 'mse':'neg_mean_squared_error'} #, 'r2':'r2'}
 
-# print("Cross-check against full spec of model: ")
-# print(best_clf.get_params)
+cv = model_selection.GridSearchCV(estimator=clf, param_grid=param_grid, cv=4, n_jobs=6, verbose=1, scoring='neg_mean_squared_error')
 
-# print("Turned Extra Trees Result")
-# print(classifier_report(best_clf, y_test, y_pred))
+cv.fit(X_train, y_train)
+duration = timer() - start
+print("Execution complete in: {0:15.1f}s".format(duration) + " (" + str(datetime.timedelta(seconds=duration)) + ")")
+print("Best score: " + str(cv.best_score_))
+print("Done.")
+
+log = open('/Users/ritalaplante/Desktop/Thesis Data and Analytics/09-Logged Outputs/'+to_use+'-Fit.txt','a')
+
+print("Params Random Forest: ", file=log)
+print(param_grid, file=log)
+print("Best Cross-Validation score Random Forest: " + str(cv.best_score_), file=log)
+
+best_clf = cv.best_estimator_ # Extract the best estimator from the GridSearch
+best_clf.fit(X_train, y_train)
+y_pred  = best_clf.predict(X_test)
+
+print("Best parameters from Cross-Validation Random Forest: " + str(cv.best_params_), file=log)
+print("Best parameters from Cross-Validation Random Forest: " + str(cv.best_params_))
+print("", file=log)
+
+print("Cross-check against full spec of model: ", file=log)
+print(best_clf.get_params, file=log)
+print(best_clf.get_params)
+print("", file=log)
+
+print("Tuned Random Forest result:", file=log)
+print(classifier_report(best_clf, y_test, y_pred), file=log)
+print(classifier_report(best_clf, y_test, y_pred))
+print("", file=log)
+
+# Create a data frame of feature importance so that we
+# can inspect later...
+fi = pd.DataFrame.from_dict({'feature':X_test.columns.values, 'importance':best_clf.feature_importances_})
+fi.sort_values(by='importance', ascending=False, inplace=True)
+fi.to_csv('/Users/ritalaplante/Desktop/Thesis Data and Analytics/07-Neighborhood Predictions/FeatureImportance' + to_use + 'RF.csv', index=False)
+
+print("Feature Importances (5 Biggest) Random Forest:", file=log)
+print(fi.head(5), file=log)
+print(fi.head(5))
+print("", file=log)
 
 
-# # Create a data frame of feature importance so that we
-# # can inspect later...
-# fi = pd.DataFrame.from_dict({'feature':X_test.columns.values, 'importance':best_clf.feature_importances_})
-# fi.sort_values(by='importance', ascending=False, inplace=True)
-# fi.to_csv('/Users/ritalaplante/Desktop/Thesis Data and Analytics/07-Neighborhood Predictions/FeatureImportance.csv', index=False)
+print("Feature Importances (10 Biggest) Random Forest:", file=log)
+print(fi.head(10), file=log)
+print(fi.head(10))
+print("", file = log)
 
-# print("Feature Importances (5 Biggest):")
-# print(fi.head(5))
+log.close()
+
 
 
 
